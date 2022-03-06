@@ -1,6 +1,8 @@
-from flask import Flask
+from flask import Flask, jsonify
+from flask_restful import Api, Resource, reqparse, abort, fields, marshal_with
 from flask_sqlalchemy import SQLAlchemy
 from os import path
+import json
 import requests
 
 db = SQLAlchemy()
@@ -22,8 +24,8 @@ def create_app():
     from .models import Book as models
 
     create_database(app)
-
-    return app
+    api = Api(app)
+    return app, api
 
 def create_database(app):
     if not path.exists('books_web/' + DB_Name):
