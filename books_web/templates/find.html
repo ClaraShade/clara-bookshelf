@@ -1,0 +1,77 @@
+{% extends "books_web.html" %} {% block title %}Find a book{% endblock %}
+{% block content %} <h1>Find a book in Google public API</h1>
+<form method="GET">
+  <div class="form-group">
+    <label for="title">Book's title</label>
+    <input
+      type="text"
+      class="form-control"
+      id="title"
+      name="title"
+      placeholder="The book's title"
+    />
+  </div>
+  <div class="form-group">
+    <label for="author">Author's Name</label>
+    <input
+      type="text"
+      class="form-control"
+      id="author"
+      name="author"
+      placeholder="The author's name"
+    />
+  </div>
+  <div class="form-group">
+    <label for="isbn">ISBN</label>
+    <input
+      type="integer"
+      class="form-control"
+      id="isbn"
+      name="isbn"
+      placeholder="The ISBN number"
+    />
+  </div>
+  <div class="form-group">
+    <label for="publilshed">Date of publishing</label>
+    <input
+      type="date"
+      class="form-control"
+      id="publilshed"
+      name="publilshed"
+      placeholder="Date of publishing"
+    />
+  </div>
+  <div class="form-group">
+    <label for="pages">Number of pages</label>
+    <input
+      type="integer"
+      class="form-control"
+      id="pages"
+      name="pages"
+      placeholder="Number of pages"
+    />
+  </div>
+    <div class="form-group">
+    <label for="cover">Url to cover</label>
+    <input
+      type="text"
+      class="form-control"
+      id="cover"
+      name="cover"
+      placeholder="Url to cover"
+    />
+  </div>
+      <div class="form-group">
+    <label for="language">Book's language</label>
+    <input
+      type="text"
+      class="form-control"
+      id="language"
+      name="language"
+      placeholder="Language"
+    />
+  </div>
+  <br />
+  <button type="submit" class="btn btn-primary">Find</button>
+</form>
+{% endblock %}
