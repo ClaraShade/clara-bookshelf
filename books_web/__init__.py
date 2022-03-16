@@ -1,4 +1,4 @@
-from flask import Flask, jsonify
+from flask import Flask
 from flask_restful import Api, Resource, reqparse, abort, fields, marshal_with
 from flask_sqlalchemy import SQLAlchemy
 from os import path
@@ -21,7 +21,7 @@ def create_app():
 
     app.register_blueprint(views, url_prefix='/')
 
-    from .models import Book as models
+    from . import models
 
     create_database(app)
     api = Api(app)

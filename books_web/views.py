@@ -5,11 +5,9 @@ from . import db
 from . import requests
 import json
 
-# fom werkzeug.security import generate_password_hash, check_password_hash
-
 views = Blueprint('views', __name__)
 
-"""resource_fields = {
+resource_fields = {
     "isbn": fields.Integer,
     "title": fields.String,
     "author": fields.String,
@@ -17,13 +15,29 @@ views = Blueprint('views', __name__)
     "pages": fields.Integer,
     "cover": fields.String,
     "language": fields.String
-}"""
+}
 
-@views.route('/bookshelf', methods=['GET', 'POST', 'PUT', 'DELETE', 'UPDATE'])
+@views.route('/', methods=['GET', 'POST', 'PUT', 'DELETE', 'UPDATE'])
 def bookshelf():
-    # if request.method == 'GET':
+    booklist = []
+    book_count = 0
+    books = Book.query.all()
+    for book in books:
+        book_dicted = book.to_dict()
+        print(book_dicted)
+        booklist.append(book_dicted)
+        # for element in book_dicted:
+        #    value = book_dicted[element]
+        #    my_book[element] = value
+        #booklist.append(my_book)
+        #book_count = book_count +1
+    #print(booklist)
+    #my_bookshelf = json.dumps(booklist)
+    #print(my_bookshelf)
+    print(booklist)
+    return render_template("bookshelf.html", booklist=booklist)
 
-    return render_template("bookshelf.html")
+    # return render_template("bookshelf.html"), response
 
 
 @views.route('/add', methods=['GET', 'POST', 'PUT', 'DELETE', 'UPDATE'])
@@ -49,6 +63,7 @@ def add():
                     flash('You added the new book', category='confirm')
                     new_book = Book(isbn=isbn, title=title, author=author, published=published,
                                     pages=pages, cover=cover, language=language)
+                    print(new_book)
                     db.session.add(new_book)
             except ValueError:
                 flash('ISBN number must be a number', category='error')
@@ -59,12 +74,11 @@ def add():
 
 
 @views.route('/find', methods=['GET', 'POST', 'PUT', 'DELETE', 'UPDATE'])
-# @marshal_with(resource_fields)
 def find():
-    """if request.method == 'GET':
+    """ if request.method == 'GET':
         response = requests.request("GET",
                                 "https://www.googleapis.com/books/v1/volumes?q=hobbit")
-        # book = make_response(jsonify(response))"""
+        book = make_response(jsonify(response)) """
 
     response = requests.get("https://www.googleapis.com/books/v1/volumes?q=hobbit")
     search_results = response.json()
@@ -81,5 +95,13 @@ def find():
                 pass
         print(found_book)
 
-
     return render_template("find.html")
+
+
+@views.route('/api/find')
+def find_api():
+    response = requests.get(
+        "https://www.googleapis.com/books/v1/volumes?q=hobbit")
+    search_results = response.json()
+
+    return jsonify(search_results)
