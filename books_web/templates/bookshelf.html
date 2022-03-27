@@ -2,21 +2,27 @@
 {% extends "books_web.html" %} {% block title %}Bookshelf{% endblock %}
 {% block content %}
 <div class="container">
-<form class="form-inline" method="GET">
+<form class="form-inline" method="POST">
   <div class="form-group">
-    <input type="text" class="form-control" id="title"
+    <input type="text" class="form-control" id="title" name="title"
            placeholder="Title">
   </div>
   <div class="form-group">
-    <input type="text" class="form-control" id="author"
+    <input type="text" class="form-control" id="author" name="author"
            placeholder="Author(s)">
   </div>
       <div class="form-group">
-    <input type="text" class="form-control" id="published"
-           placeholder="Published">
+    <input type="text" class="form-control" id="published_from"
+           name="published_from"
+           placeholder="From: YYYY-MM-DD">
+  </div>
+        <div class="form-group">
+    <input type="text" class="form-control" id="published_to"
+           name="published_to"
+           placeholder="To: YYYY-MM-DD">
   </div>
     <div class="form-group">
-    <input type="text" class="form-control" id="language"
+    <input type="text" class="form-control" id="language" name="language"
            placeholder="Language">
   </div>
   <button type="submit" class="btn btn-primary">Search</button>

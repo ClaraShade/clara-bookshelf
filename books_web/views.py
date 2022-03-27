@@ -1,6 +1,7 @@
+from datetime import date
 from flask import Blueprint, render_template, request, flash, jsonify, make_response
 from .models import Book
-from flask_restful import Api, Resource, reqparse, abort, fields, marshal_with
+from flask_restful import Api, Resource, reqparse, fields
 from . import db
 from . import requests
 import json
@@ -20,24 +21,39 @@ resource_fields = {
 @views.route('/', methods=['GET', 'POST', 'PUT', 'DELETE', 'UPDATE'])
 def bookshelf():
     booklist = []
-    book_count = 0
     books = Book.query.all()
     for book in books:
         book_dicted = book.to_dict()
-        print(book_dicted)
         booklist.append(book_dicted)
-        # for element in book_dicted:
-        #    value = book_dicted[element]
-        #    my_book[element] = value
-        #booklist.append(my_book)
-        #book_count = book_count +1
-    #print(booklist)
-    #my_bookshelf = json.dumps(booklist)
-    #print(my_bookshelf)
     print(booklist)
-    return render_template("bookshelf.html", booklist=booklist)
+    if request.method=='POST':
+        title = request.form.get("title")
+        author = request.form.get("author")
+        published_from = request.form.get("published_from")
+        published_to = request.form.get("published_to")
+        language = request.form.get("language")
+        if published_from == '':
+            published_from = '0000-01-01'
+        if published_to == '':
+            today = date.today()
+            published_to = today.isoformat()
 
-    # return render_template("bookshelf.html"), response
+        my_books = Book.query.filter(Book.title.ilike(f'%{title}%'),
+                                     Book.author.ilike(f'%{author}%'),
+                                     Book.language.ilike(f'%{language}%'))\
+            .filter((Book.published == '') |(Book.published >= published_from)&
+                    (Book.published <= published_to)).all()
+        print(my_books)
+        if my_books:
+            booklist = []
+            for book in my_books:
+                filtered_dict = book.to_dict()
+                print(filtered_dict)
+                booklist.append(filtered_dict)
+        else:
+            flash('There is no book matching your criteria', category='error')
+
+    return render_template("bookshelf.html", booklist=booklist)
 
 
 @views.route('/add', methods=['GET', 'POST', 'PUT', 'DELETE', 'UPDATE'])
